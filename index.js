@@ -9,7 +9,7 @@ const files = []
 targetDirectories.forEach(dir => {
   const fileCountBefore = files.length
   console.log(`processing files in ${dir}`)
-  runForFiles(dir, files)
+  runForFiles(dir, files, __dirname)
   const fileCountAfter = files.length
   console.log(` found ${fileCountAfter - fileCountBefore} files`)
 })
