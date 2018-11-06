@@ -16,7 +16,7 @@ targetDirectories.forEach(dir => {
 
 console.log(`${files.length} total files`)
 
-const bar = new ProgressBar('processing [:bar] :current/:total', { total: files.length })
+const bar = new ProgressBar(' processing [:bar] :current/:total', { total: files.length })
 
 const finalResult = files.reduce((result, file) => {
   analyze(file, result)
