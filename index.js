@@ -18,11 +18,10 @@ console.log(`${files.length} total files`)
 
 const bar = new ProgressBar('processing [:bar] :current/:total', { total: files.length })
 
-const finalResult = {}
-
-files.forEach(file => {
-  analyze(file, finalResult)
+const finalResult = files.reduce((result, file) => {
+  analyze(file, result)
   bar.tick()
-})
+  return result
+}, {})
 
 console.log(JSON.stringify(finalResult, null, 2))
