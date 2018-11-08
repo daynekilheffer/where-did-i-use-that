@@ -1,4 +1,4 @@
-const runForFiles = require('./lib/run-for-files')
+const findJsFiles = require('./lib/find-js-files')
 const analyze = require('./lib/analyze')
 const ProgressBar = require('progress')
 
@@ -9,7 +9,7 @@ const files = []
 targetDirectories.forEach(dir => {
   const fileCountBefore = files.length
   console.log(`processing files in ${dir}`)
-  runForFiles(dir, files, __dirname)
+  findJsFiles(dir, files, __dirname)
   const fileCountAfter = files.length
   console.log(` found ${fileCountAfter - fileCountBefore} files`)
 })
