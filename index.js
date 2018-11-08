@@ -1,9 +1,18 @@
 const findJsFiles = require('./lib/find-js-files')
 const analyze = require('./lib/analyze')
+const formatter = require('./lib/formatter')
+
 const ProgressBar = require('progress')
+const argv = require('yargs')
+    .option('format', {
+        describe: 'format',
+        choices: ['json', 'table'],
+        default: 'json'
+    })
+    .help()
+    .argv
 
-
-const targetDirectories = process.argv.slice(2)
+const targetDirectories = argv._
 const files = []
 
 targetDirectories.forEach(dir => {
@@ -24,4 +33,4 @@ const finalResult = files.reduce((result, file) => {
   return result
 }, {})
 
-console.log(JSON.stringify(finalResult, null, 2))
+console.log(formatter(finalResult, argv.format))
