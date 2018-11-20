@@ -32,4 +32,10 @@ do
   (
     cd packages/${repo} && npm i
   )
+  (
+    if [[ -f "packages/${repo}/lerna.json" ]]; then
+      cd packages/${repo}
+      npx lerna bootstrap
+    fi
+  )
 done
