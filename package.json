@@ -1,11 +1,8 @@
 {
-  "name": "ast-dependencies",
+  "name": "where-did-i-use-that",
   "version": "1.0.0",
-  "description": "",
+  "description": "find usages of a module inside of a set of repositories",
   "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
   "author": "dayne m kilheffer",
   "license": "ISC",
   "dependencies": {
