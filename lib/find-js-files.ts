@@ -1,7 +1,7 @@
-const fs = require('fs')
-const path = require('path')
+import fs = require('fs')
+import path = require('path')
 
-const runForFiles = (dir, destination, root) => {
+const runForFiles = (dir: string, destination: string[], root: string) => {
   const dirContents = fs.readdirSync(dir)
   dirContents
     .map(handle => path.resolve(dir, handle).replace(root, '.'))
@@ -10,11 +10,11 @@ const runForFiles = (dir, destination, root) => {
       if (fs.lstatSync(handle).isDirectory()) {
         runForFiles(handle, destination, root)
       }
-      if (/\.jsx?$/.test(handle) && !/\.spec\.jsx?$/.test(handle)) {
+      if (/\.[jt]sx?$/.test(handle) && !/\.spec\.[jt]sx?$/.test(handle)) {
         destination.push(handle)
       }
     })
 }
 
 
-module.exports = runForFiles
+export default runForFiles

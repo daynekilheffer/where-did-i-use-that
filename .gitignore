@@ -2,3 +2,5 @@ node_modules
 packages
 .repos
 .DS_Store
+*.out
+out

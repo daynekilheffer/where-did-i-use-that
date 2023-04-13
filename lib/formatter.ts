@@ -1,7 +1,7 @@
-const { map, flatten } = require('lodash')
-const { table, getBorderCharacters } = require('table')
+import { map, flatten } from 'lodash'
+import { table, getBorderCharacters } from 'table'
 
-const jsonFormat = (results) => {
+const jsonFormat = (results: ResultSet) => {
   return JSON.stringify(results, null, 2)
 }
 
@@ -17,7 +17,7 @@ const tableConfig = {
   },
 }
 
-const tableFormat = (results) => {
+const tableFormat = (results: ResultSet) => {
   const data = flatten(map(results, (components, moduleName) => {
     return flatten(map(components, (dependentFiles, dependent) => {
       return map(dependentFiles, (file, idx) => {
@@ -30,7 +30,7 @@ const tableFormat = (results) => {
     }))
   }))
   return table(data, Object.assign({}, tableConfig, {
-    drawHorizontalLine: (index) => {
+    drawHorizontalLine: (index: number) => {
       return !data[index] || data[index][1] !== ''
     }
   }))
@@ -41,4 +41,6 @@ const formatters = {
   table: tableFormat
 }
 
-module.exports = (results, format) => formatters[format](results)
+type ResultSet = Record<string, Record<string, string[]>>
+
+export default (results: ResultSet, format: keyof typeof formatters) => formatters[format](results)
