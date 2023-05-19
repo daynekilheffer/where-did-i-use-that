@@ -6,5 +6,6 @@
     "outDir": "out",
     "sourceMap": true
   },
-  "exclude": ["node_modules", "out", "packages"]
+  "include": ["lib/**/*", "*.ts"],
+  "exclude": ["node_modules", "out", "packages/**/*"]
 }

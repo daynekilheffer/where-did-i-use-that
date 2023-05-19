@@ -1,4 +1,3 @@
-import { map, flatten } from 'lodash'
 import { table, getBorderCharacters } from 'table'
 
 const jsonFormat = (results: ResultSet) => {
@@ -27,11 +26,13 @@ const tableConfig = {
     }
   },
 }
+const mapObject = <K extends string, V>(obj: Record<K, V>, fn: (value: V, key: K) => any) => Object.entries(obj).map(([key, value]) => fn(value as V, key as K))
+const flatten = <T = any>(arr: T[][]) => arr.reduce((result, item) => result.concat(item), [] as T[])
 
 const tableFormat = (results: ResultSet) => {
-  const data = flatten(map(results, (components, moduleName) => {
-    return flatten(map(components, (dependentFiles, dependent) => {
-      return map(dependentFiles, (file, idx) => {
+  const data = flatten(mapObject(results, (components, moduleName) => {
+    return flatten(mapObject(components, (dependentFiles, dependent) => {
+      return dependentFiles.map((file, idx) => {
         return [
           idx === 0 ? moduleName : '',
           idx === 0 ? dependent : '',
@@ -53,6 +54,9 @@ const formatters = {
   csv: csvFormat,
 }
 
-type ResultSet = Record<string, Record<string, string[]>>
+type ModuleName = string
+type Dependent = string
+type Component = string
+type ResultSet = Record<ModuleName, Record<Dependent, Component[]>>
 
 export default (results: ResultSet, format: keyof typeof formatters) => formatters[format](results)
