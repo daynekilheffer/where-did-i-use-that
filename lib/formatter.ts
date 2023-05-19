@@ -5,6 +5,17 @@ const jsonFormat = (results: ResultSet) => {
   return JSON.stringify(results, null, 2)
 }
 
+const csvFormat = (results: ResultSet) => {
+  return Object.entries(results).reduce((result, [moduleName, componentUsage]) => {
+    Object.entries(componentUsage).forEach(([component, files]) => {
+      files.forEach((file) => {
+        result.push([moduleName, component, file].join(','))
+      })
+    })
+    return result
+  }, [] as string[]).join('\n')
+}
+
 const tableConfig = {
   border: getBorderCharacters('norc'),
   columns: {
@@ -38,7 +49,8 @@ const tableFormat = (results: ResultSet) => {
 
 const formatters = {
   json: jsonFormat,
-  table: tableFormat
+  table: tableFormat,
+  csv: csvFormat,
 }
 
 type ResultSet = Record<string, Record<string, string[]>>

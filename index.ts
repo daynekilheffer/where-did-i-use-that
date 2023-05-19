@@ -7,7 +7,7 @@ const debug = require('debug')('ast')
 
 import ProgressBar = require('progress')
 
-const formats = ['json', 'table'] as const
+const formats = ['json', 'table', 'csv'] as const
 const argv = yargs
   .option('format', {
     describe: 'format',
