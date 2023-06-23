@@ -54,9 +54,18 @@ const formatters = {
   csv: csvFormat,
 }
 
-type ModuleName = string
-type Dependent = string
-type Component = string
+// just strings, but &'ing with {} makes them unique types
+type ModuleName = string & {}
+type Dependent = string & {}
+type Component = string & {}
 type ResultSet = Record<ModuleName, Record<Dependent, Component[]>>
 
-export default (results: ResultSet, format: keyof typeof formatters) => formatters[format](results)
+export default (results: ResultSet, format: keyof typeof formatters) => {
+  if (Object.keys(results).length === 0) {
+    console.log()
+    console.log('No data found')
+    console.log()
+    return
+  }
+  return formatters[format](results)
+}

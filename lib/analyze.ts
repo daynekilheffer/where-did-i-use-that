@@ -1,5 +1,6 @@
 import babel = require('@babel/core')
 import Debug from 'debug'
+import { string } from 'yargs'
 
 const debug = Debug('analyze')
 
@@ -9,7 +10,7 @@ const addToRecord = (record: Record<string, Record<string, string[]>>, mod: stri
   record[mod][imp].push(file)
 }
 
-const analyze = (file: string, finalResult: Record<string, Record<string, string[]>>, searchTarget: string) => {
+const analyze = (file: string, finalResult: Record<string, Record<string, string[]>>, searchTarget: { package?: string, component?: string }) => {
   let transpiledCode
   try {
     transpiledCode = babel.transformFileSync(file, {
@@ -28,17 +29,25 @@ const analyze = (file: string, finalResult: Record<string, Record<string, string
     return
   }
 
+  const pkg = searchTarget.package
+  const pkgMatcher = pkg ? (underTest: string) => underTest.includes(pkg) : () => true
+  const component = searchTarget.component
+  const componentMatcher = component ? (underTest: string) => underTest.includes(component) : () => true
+
   const specifiers: { name: string, as?: string, from: string }[] = []
   for (const node of transpiledCode.ast?.program.body) {
     if (node.type !== 'ImportDeclaration') {
       continue
     }
-    if (!node.source.value.startsWith(searchTarget)) {
+    if (!pkgMatcher(node.source.value)) {
       continue
     }
 
     for (const spec of node.specifiers) {
       if (spec.type === 'ImportDefaultSpecifier') {
+        if (!componentMatcher(spec.local.name)) {
+          continue
+        }
         addToRecord(finalResult, node.source.value, 'default', file)
         debug({
           from: node.source.value,
@@ -49,6 +58,9 @@ const analyze = (file: string, finalResult: Record<string, Record<string, string
         let name = spec.local.name
         if (spec.imported?.type === 'Identifier') {
           name = spec.imported.name
+        }
+        if (!componentMatcher(name)) {
+          continue
         }
         addToRecord(finalResult, node.source.value, name, file)
         debug({
