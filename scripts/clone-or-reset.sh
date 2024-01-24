@@ -9,7 +9,7 @@ do
   else
     echo "found repo ${repo}"
     (
-      cd packages/${repo} && git reset --hard origin/HEAD
+      cd packages/${repo} && git fetch --all && git reset --hard origin/HEAD
     )
   fi
 

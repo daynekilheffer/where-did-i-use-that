@@ -4,3 +4,4 @@ packages
 .DS_Store
 *.out
 out
+*.log

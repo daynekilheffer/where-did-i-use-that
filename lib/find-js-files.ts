@@ -1,12 +1,12 @@
-import fs = require('fs')
-import path = require('path')
+import * as fs from "fs"
+import * as path from "path"
 
 const runForFiles = (dir: string, destination: string[], root: string) => {
   const dirContents = fs.readdirSync(dir)
   dirContents
-    .map(handle => path.resolve(dir, handle).replace(root, '.'))
-    .filter(handle => !handle.includes('node_modules'))
-    .forEach(handle => {
+    .map((handle) => path.resolve(dir, handle).replace(root, "."))
+    .filter((handle) => !handle.includes("node_modules"))
+    .forEach((handle) => {
       if (fs.lstatSync(handle).isDirectory()) {
         runForFiles(handle, destination, root)
       }
@@ -15,6 +15,5 @@ const runForFiles = (dir: string, destination: string[], root: string) => {
       }
     })
 }
-
 
 export default runForFiles

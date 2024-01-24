@@ -1,5 +1,5 @@
 import findJsFiles from './lib/find-js-files'
-import analyze from './lib/analyze'
+import search from './lib/search'
 import formatter from './lib/formatter'
 import * as yargs from 'yargs'
 
@@ -52,7 +52,7 @@ debug(`${files.length} total files`)
 const bar = new ProgressBar(' processing [:bar] :current/:total ', { total: files.length })
 
 const finalResult = files.reduce((result, file) => {
-  analyze(file, result, { package: pkg, component: comp })
+  search(file, result, { package: pkg, component: comp })
   bar.tick()
   return result
 }, {})

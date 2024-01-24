@@ -7,7 +7,9 @@
   "license": "ISC",
   "scripts": {
     "build": "tsc",
-    "search": "ts-node index.ts"
+    "search": "ts-node index.ts",
+    "audit:create": "ts-node generate-audit.ts",
+    "audit:search": "ts-node search-audit.ts"
   },
   "dependencies": {
     "@babel/core": "^7.21.8",
