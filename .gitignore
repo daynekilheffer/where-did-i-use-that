@@ -5,3 +5,4 @@ packages
 *.out
 out
 *.log
+audit.json

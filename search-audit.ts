@@ -1,5 +1,4 @@
 import * as yargs from "yargs"
-import findJsFiles from "./lib/find-js-files"
 
 const debug = require("debug")("ast")
 
@@ -27,6 +26,11 @@ const argv = yargs
     describe: "component to look for",
     type: "string",
   })
+  .option("references", {
+    describe: "show individual references with file:line-number format",
+    type: "boolean",
+    default: false,
+  })
   .parseSync()
 
 const audit = require(argv.audit) as AuditSchema
@@ -52,7 +56,17 @@ const matchingImports = Object.entries(audit).reduce<ResultSet>((result, [file, 
       key = "*"
     }
     working[key] = working[key] || []
-    working[key].push(file)
+
+    // If references option is enabled and references exist, add file:line-number for each reference
+    if (argv.references && imp.references && imp.references.length > 0) {
+      imp.references.forEach((lineNumber) => {
+        working[key].push(`${file}:${lineNumber}`)
+      })
+    } else {
+      // Otherwise, just add the file
+      working[key].push(file)
+    }
+
     result[imp.dependency] = working
   })
   return result

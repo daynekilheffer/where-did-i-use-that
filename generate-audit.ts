@@ -44,26 +44,29 @@ const bar = new ProgressBar(" processing [:bar] :current/:total ", {
 const finalResult = files.reduce<AuditSchema>((result, file) => {
   result[file] = []
   processImports(file, {
-    processDefault(target, alias) {
+    processDefault(target, alias, references) {
       result[file].push({
         type: "default",
         dependency: target,
         alias: alias,
+        references: references,
       })
     },
-    processNamedImport(target, name, alias) {
+    processNamedImport(target, name, alias, references) {
       result[file].push({
         type: "name",
         dependency: target,
         name: name,
         alias: alias,
+        references: references,
       })
     },
-    processNamespaceImport(target, alias) {
+    processNamespaceImport(target, alias, references) {
       result[file].push({
         type: "namespace",
         dependency: target,
         alias: alias,
+        references: references,
       })
     },
   })
