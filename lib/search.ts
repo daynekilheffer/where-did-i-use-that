@@ -5,8 +5,8 @@ import Debug from "debug"
 const debug = Debug("search")
 
 const addToRecord = (record: ResultSet, mod: string, imp: string, file: string) => {
-  record[mod] = record[mod] || {}
-  record[mod][imp] = record[mod][imp] || []
+  record[mod] ??= {}
+  record[mod][imp] ??= []
   record[mod][imp].push(file)
 }
 

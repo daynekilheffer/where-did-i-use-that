@@ -6,14 +6,14 @@ const jsonFormat = (results: ResultSet) => {
 
 const csvFormat = (results: ResultSet) => {
   return Object.entries(results)
-    .reduce((result, [moduleName, componentUsage]) => {
+    .reduce<string[]>((result, [moduleName, componentUsage]) => {
       Object.entries(componentUsage).forEach(([component, files]) => {
         files.forEach((file) => {
           result.push([moduleName, component, file].join(","))
         })
       })
       return result
-    }, [] as string[])
+    }, [])
     .join("\n")
 }
 
@@ -40,18 +40,16 @@ const tableFormat = (results: ResultSet) => {
           return dependentFiles.map((file, idx) => {
             return [idx === 0 ? moduleName : "", idx === 0 ? dependent : "", file]
           })
-        })
+        }),
       )
-    })
+    }),
   )
-  return table(
-    data,
-    Object.assign({}, tableConfig, {
-      drawHorizontalLine: (index: number) => {
-        return !data[index] || data[index][1] !== ""
-      },
-    })
-  )
+  return table(data, {
+    ...tableConfig,
+    drawHorizontalLine: (index: number) => {
+      return !data[index] || data[index][1] !== ""
+    },
+  })
 }
 
 const formatters = {
