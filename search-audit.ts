@@ -31,11 +31,22 @@ const argv = yargs
     type: "boolean",
     default: false,
   })
+  .option("exclude-repo", {
+    describe: "exclude files whose path contains this substring (repeatable)",
+    type: "string",
+    array: true,
+    default: [] as string[],
+  })
   .parseSync()
 
 const audit = require(argv.audit) as AuditSchema
 
+const excludeRepos = argv["exclude-repo"] as string[]
+
 const matchingImports = Object.entries(audit).reduce<ResultSet>((result, [file, imports]) => {
+  if (excludeRepos.some((repo) => file.includes(repo))) {
+    return result
+  }
   const { package: pkg, component } = argv
   if (pkg) {
     imports = imports.filter((imp) => imp.dependency.includes(pkg))
