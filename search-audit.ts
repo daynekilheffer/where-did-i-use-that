@@ -31,7 +31,7 @@ const argv = yargs
     type: "boolean",
     default: false,
   })
-  .option("exclude-repo", {
+  .option("exclude-path", {
     describe: "exclude files whose path contains this substring (repeatable)",
     type: "string",
     array: true,
@@ -41,10 +41,10 @@ const argv = yargs
 
 const audit = require(argv.audit) as AuditSchema
 
-const excludeRepos = argv["exclude-repo"] as string[]
+const excludePaths = argv["exclude-path"] as string[]
 
 const matchingImports = Object.entries(audit).reduce<ResultSet>((result, [file, imports]) => {
-  if (excludeRepos.some((repo) => file.includes(repo))) {
+  if (excludePaths.some((path) => file.includes(path))) {
     return result
   }
   const { package: pkg, component } = argv
