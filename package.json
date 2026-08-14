@@ -2,12 +2,10 @@
   "name": "where-did-i-use-that",
   "version": "1.0.0",
   "description": "find usages of a module inside of a set of repositories",
-  "main": "index.js",
   "author": "dayne m kilheffer",
   "license": "ISC",
   "scripts": {
     "build": "tsc",
-    "search": "ts-node index.ts",
     "audit:create": "ts-node generate-audit.ts",
     "audit:search": "ts-node search-audit.ts"
   },

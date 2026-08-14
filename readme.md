@@ -37,6 +37,12 @@ clone the repos locally
 npm run audit:create -- --repos packages/*/* --out audit.json
 ```
 
+exclude files whose path contains a given substring (repeatable)
+
+```sh
+npm run audit:create -- --repos packages/*/* --out audit.json --exclude-path __generated__ --exclude-path /cypress/
+```
+
 ### execution a search
 
 ```sh

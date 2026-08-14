@@ -19,12 +19,19 @@ const argv = yargs
     describe: "output file",
     type: "string",
   })
+  .option("exclude-path", {
+    describe: "exclude files whose path contains this substring (repeatable)",
+    type: "string",
+    array: true,
+    default: [] as string[],
+  })
   .parseSync()
 
 let fd: number = process.stdout.fd
 if (argv.out) {
   fd = fs.openSync(argv.out, "w")
 }
+const excludePaths = argv["exclude-path"] as string[]
 const files: string[] = []
 
 ;(argv.repos as string[]).forEach((dir) => {
@@ -35,13 +42,15 @@ const files: string[] = []
   debug(` found ${fileCountAfter - fileCountBefore} files`)
 })
 
-debug(`${files.length} total files`)
+const filteredFiles = files.filter((file) => !excludePaths.some((path) => file.includes(path)))
+
+debug(`${files.length} total files, ${filteredFiles.length} after exclusions`)
 
 const bar = new ProgressBar(" processing [:bar] :current/:total ", {
-  total: files.length,
+  total: filteredFiles.length,
 })
 
-const finalResult = files.reduce<AuditSchema>((result, file) => {
+const finalResult = filteredFiles.reduce<AuditSchema>((result, file) => {
   result[file] = []
   processImports(file, {
     processDefault(target, alias, references) {
